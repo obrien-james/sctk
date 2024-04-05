@@ -1083,12 +1083,12 @@ def plot_embedding(
                 adata.uns[f"{color}_colors"][nohl_i] = "#E0E0E0"
 
     if annot == "full":
-        adata.obs[groupby].cat.rename_categories(rename_dict1, inplace=True)
+         adata.obs[groupby] = adata.obs[groupby].cat.rename_categories(rename_dict1)
     elif annot in (None, False, "none"):
         kwargs["title"] = ""
         kwargs["legend_loc"] = None
     else:
-        adata.obs[groupby].cat.rename_categories(rename_dict2, inplace=True)
+         adata.obs[groupby] = adata.obs[groupby].cat.rename_categories(rename_dict2)
 
     try:
         if "ax" in kwargs:
@@ -1098,9 +1098,9 @@ def plot_embedding(
             ax = plot_scatter(adata, basis=basis, color=color, size=marker_size, **kwargs)
     finally:
         if annot == "full":
-            adata.obs[groupby].cat.rename_categories(restore_dict1, inplace=True)
+             adata.obs[groupby] = adata.obs[groupby].cat.rename_categories(restore_dict1)
         elif annot not in (None, False, "none"):
-            adata.obs[groupby].cat.rename_categories(restore_dict2, inplace=True)
+             adata.obs[groupby] = adata.obs[groupby].cat.rename_categories(restore_dict2)
     if annot not in (None, False, "none"):
         centroids = pseudo_bulk(adata, groupby, use_rep=f"X_{basis}", FUN=np.median).T
         fontsize = kwargs["legend_fontsize"] if "legend_fontsize" in kwargs else 11
@@ -1120,7 +1120,7 @@ def plot_embedding(
             ncol=int(np.ceil(len(categories) / int(figsize[1] * 3) / 8 * fontsize)),
             fontsize=fontsize * 1.1,
             markerscale=3 * (fontsize / 11) * version_scale,
-            handletextpad=-1.9,
+            handletextpad=-1.05,
             labelspacing=9 / fontsize,
         )
     if save:
